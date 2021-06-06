@@ -55,10 +55,7 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder>{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Bundle bundle = new Bundle();
-                        bundle.putString("Name", u.getName());
-                        bundle.putString("desc", u.getDesc());
-                        bundle.putInt("id",u.getId());
-                        bundle.putBoolean("followed", u.getFollowed());
+                        bundle.putInt("index", position);
                         Intent intent = new Intent(context, MainActivity.class);
                         intent.putExtras(bundle);
                         context.startActivity(intent);

@@ -16,17 +16,17 @@ public class MainActivity extends AppCompatActivity {
     private String desc;
     private boolean follow;
     private int id;
+    private int index;
 
+    UserDbHandler dbHandler = new UserDbHandler(this, null,null,1);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //user1 = new User("Hello World!", "Long Descriptionnnnnn", 1, false);
         Intent receivedData = getIntent();
-        name = receivedData.getStringExtra("Name");
-        desc = receivedData.getStringExtra("desc");
-        id = receivedData.getIntExtra("id",0);
-        follow = receivedData.getBooleanExtra("followed",true);
+        index = receivedData.getIntExtra("index",0);
+        User user = ListActivity.userList.get(index);
 
         TextView nameText = findViewById(R.id.nametext);
         TextView descText = findViewById(R.id.desctext);
@@ -51,13 +51,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (follow == false){
                     buttonf.setText("Unfollow");
-                    follow = true;
+                    user.setFollowed(true);
+                    dbHandler.updateUser(user);
                     toast = Toast.makeText(getApplicationContext(), "Followed" ,duration);
                     toast.show();
                 }
                 else{
                     buttonf.setText("Follow");
-                    follow = false;
+                    user.setFollowed(false);
+                    dbHandler.updateUser(user);
                     toast = Toast.makeText(getApplicationContext(), "Unfollowed" ,duration);
                     toast.show();
                 }

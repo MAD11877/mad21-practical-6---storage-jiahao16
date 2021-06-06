@@ -18,8 +18,10 @@ import java.util.Random;
 
 public class ListActivity extends AppCompatActivity {
     //ArrayList<String> myList = new ArrayList<>();
-    ArrayList<User> userList = new ArrayList<>();
+    public static ArrayList<User> userList = new ArrayList<>();
     static Context context;
+
+    UserDbHandler dbHandler = new UserDbHandler(this, null,null,1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,31 +29,16 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         context = this;
 
+        setUsers();
 
-        for (int i = 0; i< 20; i++){
-            String username = "Name"+ String.valueOf(randomInt());
-            String desc = "Description" + String.valueOf(randomInt());
-            boolean followed = new Random().nextBoolean();
-            User u = new User(username, desc, randomInt(), followed);
-            userList.add(u);
-        }
-
-
-
+        userList = dbHandler.getUsers();
         RecyclerView recyclerView = findViewById(R.id.recycleview);
         Adapter myAdaptor = new Adapter(this, userList);
         LinearLayoutManager LayoutManger = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(LayoutManger);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(myAdaptor);
-        /*ImageView icon = findViewById(R.id.imageView3);
 
-        icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });*/
     }
 
     public void profileView(User u){
@@ -87,5 +74,16 @@ public class ListActivity extends AppCompatActivity {
         int value = ran.nextInt(10000);
         return value;
     }
+
+    private void setUsers(){
+        for (int i = 0; i< 20; i++){
+            String username = "Name"+ String.valueOf(randomInt());
+            String desc = "Description" + String.valueOf(randomInt());
+            boolean followed = new Random().nextBoolean();
+            int id = randomInt();
+            dbHandler.addUser(new User(username, desc, id, followed));
+        }
+    }
+
 
 }
